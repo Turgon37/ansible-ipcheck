@@ -1,0 +1,38 @@
+---
+# defaults file for ipcheck
+
+# Simple placeholder to allow other roles to detect this role
+ipcheck__role: true
+
+# List of required packages
+ipcheck__packages_names:
+  - git
+
+# URL of the IpCheck repository
+ipcheck__repository_url: https://github.com/Turgon37/IpCheck.git
+
+# Path to install IpCheck
+ipcheck__install_path: /opt/IpCheck
+
+# The path to the configuration file
+ipcheck__configuration_file_path: /etc/ipcheck.conf
+
+# The user ipcheck will run as
+ipcheck__runas_user: nobody
+
+# If true the cron job will be registered
+ipcheck__cron_enabled: true
+
+# Path to the IpCheck resources directory
+ipcheck__resources_path: '{{ ipcheck__install_path }}/ipcheckadvanced/resources'
+
+# List of urls, the script will fetch IPv4 from
+ipcheck__urls:
+  - https://api.ipify.org/
+  - https://bot.whatismyipaddress.com/
+
+# Configuration dict for extensions
+ipcheck__extensions: {}
+
+# URL to the dynupdate tool
+ipcheck__extension_dynupdate_url: https://raw.githubusercontent.com/Turgon37/DynUpdate/master/dynupdate.py

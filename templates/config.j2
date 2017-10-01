@@ -1,0 +1,13 @@
+;
+; {{ ansible_managed }}
+;
+[core]
+url = {{ ipcheck__urls|join(',') }}
+
+{% for name, settings in ipcheck__extensions|dictsort %}
+[extension.{{ name }}]
+{%   for key, value in settings|dictsort %}
+{{ key }} = {{ value }}
+{%   endfor %}
+
+{% endfor %}
