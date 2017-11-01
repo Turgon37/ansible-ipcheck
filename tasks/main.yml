@@ -17,3 +17,6 @@
 
 - import_tasks: configure.yml
   tags: ['ipcheck', 'ipcheck-configure']
+
+- include_tasks: facts.yml
+  when: ipcheck__facts|bool

@@ -4,6 +4,9 @@
 # Simple placeholder to allow other roles to detect this role
 ipcheck__role: true
 
+# Enable facts deploiement
+ipcheck__facts: True
+
 # List of required packages
 ipcheck__packages_names:
   - git

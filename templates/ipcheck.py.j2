@@ -1,0 +1,29 @@
+#!/usr/bin/env python
+
+import json
+import os
+import subprocess
+import sys
+
+iptables_exec = '{{ ipcheck__install_path }}/ipcheck.py'
+
+content=dict()
+
+version_re = re.compile('version\s+ v(?P<version>(?P<major>[0-9]+)[^ ]+)')
+try:
+    if not os.path.isfile(iptables_exec):
+        content['error'] = 'executable {} does not exists'.format(iptables_exec)
+    else:
+        result = subprocess.check_output([iptables_exec, '--version'], universal_newlines=True)
+        match = version_re.search(result)
+        if match:
+            content['version_full'] = match.group('version')
+            content['version_major'] = match.group('major')
+except subprocess.CalledProcessError as e:
+    content['error'] = str(e)
+
+if len(content) == 0:
+    content = None
+
+print(json.dumps(content))
+sys.exit(0)
