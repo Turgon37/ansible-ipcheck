@@ -10,13 +10,13 @@ iptables_exec = '{{ ipcheck__install_path }}/ipcheck.py'
 
 content=dict()
 
-version_re = re.compile('version\s+ v(?P<version>(?P<major>[0-9]+)[^ ]+)')
+version_re = re.compile('version\s+v(?P<version>(?P<major>[0-9]+)[^ ]+)')
 try:
     if not os.path.isfile(iptables_exec):
         content['error'] = 'executable {} does not exists'.format(iptables_exec)
     else:
         result = subprocess.check_output([iptables_exec, '--version'], universal_newlines=True)
-        match = version_re.search(result)
+        match = version_re.search(result.strip())
         if match:
             content['version_full'] = match.group('version')
             content['version_major'] = match.group('major')
