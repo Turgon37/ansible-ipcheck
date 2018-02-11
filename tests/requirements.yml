@@ -1,0 +1,5 @@
+---
+
+- name: cron
+  src: https://github.com/Turgon37/ansible-cron.git
+  version: origin/master
