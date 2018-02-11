@@ -38,5 +38,5 @@ ipcheck__urls:
 # Configuration dict for extensions
 ipcheck__extensions: {}
 
-# URL to the dynupdate tool
-ipcheck__extension_dynupdate_url: https://raw.githubusercontent.com/Turgon37/DynUpdate/master/dynupdate.py
+# List of ressource to download in the ressource directory
+ipcheck__extensions_ressources: []

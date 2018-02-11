@@ -1,21 +1,22 @@
 ---
 - name: Install required packages
   package:
-    name: '{{ item }}'
+    name:  '{{ item }}'
     state: present
   with_items: '{{ ipcheck__packages_names }}'
 
 - name: Install IpCheck program
   git:
-    repo: '{{ ipcheck__repository_url }}'
-    dest: '{{ ipcheck__install_path }}'
-    clone: yes
-    update: yes
+    repo:   '{{ ipcheck__repository_url }}'
+    dest:   '{{ ipcheck__install_path }}'
+    clone:  yes
 
-- name: Download the dynupdate tool if needed
+- name: Download externals ressources if needed
   get_url:
-    url: '{{ ipcheck__extension_dynupdate_url }}'
-    dest: "{{ ipcheck__resources_path }}/{{ ipcheck__extensions['command']['exec']|trim }}"
-    mode: 0755
-  when: (ipcheck__extensions['command'] is defined and 
-        ipcheck__extensions['command']['exec'] is defined)
+    url:      '{{ item.url }}'
+    checksum: '{{ item.checksum|d(omit) }}'
+    dest:     '{{ ipcheck__resources_path }}/{{ item.file }}'
+    owner:    '{{ ipcheck__runas_user }}'
+    group:    root
+    mode:     0750
+  with_items: '{{ ipcheck__extensions_ressources_url }}'
