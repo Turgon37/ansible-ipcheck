@@ -20,4 +20,4 @@
     owner:    '{{ ipcheck__runas_user }}'
     group:    root
     mode:     0750
-  with_items: '{{ ipcheck__extensions_ressources_url }}'
+  with_items: '{{ ipcheck__extensions_ressources }}'
