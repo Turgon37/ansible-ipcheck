@@ -2,7 +2,7 @@
 # defaults file for ipcheck
 
 # Simple placeholder to allow other roles to detect this role
-ipcheck__role: true
+ipcheck__role: True
 
 # Enable facts deploiement
 ipcheck__facts: True
@@ -24,7 +24,7 @@ ipcheck__configuration_file_path: /etc/ipcheck.conf
 ipcheck__runas_user: nobody
 
 # If true the cron job will be registered
-ipcheck__cron_enabled: true
+ipcheck__cron_enabled: True
 
 # Path to the IpCheck resources directory
 ipcheck__resources_path: '{{ ipcheck__install_path }}/ipcheckadvanced/resources'
