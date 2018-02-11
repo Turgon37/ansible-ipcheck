@@ -7,10 +7,11 @@
 
 - name: Install IpCheck program
   git:
-    repo:   '{{ ipcheck__repository_url }}'
-    dest:   '{{ ipcheck__install_path }}'
-    clone:  yes
-    update: '{{ ipcheck__git_update }}'
+    repo:    '{{ ipcheck__repository_url }}'
+    dest:    '{{ ipcheck__install_path }}'
+    clone:   yes
+    version: '{{ ipcheck__repository_version }}'
+    update:  '{{ ipcheck__git_update }}'
 
 - name: Download externals ressources if needed
   get_url:
