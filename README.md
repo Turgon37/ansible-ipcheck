@@ -16,6 +16,7 @@ Currently this role provide the following features :
   * ipcheck tool installation (see https://github.com/Turgon37/IpCheck.git)
   * ipcheck configuration
   * externals ressources fetching
+  * [local facts](#facts)
 
 ## Requirements
 
@@ -40,6 +41,14 @@ The variables that can be passed to this role and a brief description about them
 | ipcheck__urls                  | List of urls       | List of url from which to retrieve the external ip address |
 | ipcheck__extensions            | Dict               | Configuration of all extensions (for ipcheck advanced mode)|
 | ipcheck__extensions_ressources | List of ressources | List of externals ressources to fetch                      |
+
+## Facts
+
+By default the local fact are installed and expose the following variables :
+
+
+* ```ansible_local.ipcheck.version_full```
+* ```ansible_local.ipcheck.version_major```
 
 
 ## Example Playbook
