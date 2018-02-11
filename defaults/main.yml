@@ -33,6 +33,7 @@ ipcheck__resources_path: '{{ ipcheck__install_path }}/ipcheckadvanced/resources'
 ipcheck__urls:
   - https://api.ipify.org/
   - https://bot.whatismyipaddress.com/
+  - https://ifconfig.io/ip
 
 # Configuration dict for extensions
 ipcheck__extensions: {}
