@@ -17,6 +17,9 @@ ipcheck__repository_url: https://github.com/Turgon37/IpCheck.git
 # Path to install IpCheck
 ipcheck__install_path: /opt/IpCheck
 
+# Allow automatic git pull on each ansible run
+ipcheck__git_update: False
+
 # The path to the configuration file
 ipcheck__configuration_file_path: /etc/ipcheck.conf
 

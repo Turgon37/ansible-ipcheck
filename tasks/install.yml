@@ -10,6 +10,7 @@
     repo:   '{{ ipcheck__repository_url }}'
     dest:   '{{ ipcheck__install_path }}'
     clone:  yes
+    update: '{{ ipcheck__git_update }}'
 
 - name: Download externals ressources if needed
   get_url:
