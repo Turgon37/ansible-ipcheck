@@ -15,7 +15,7 @@ ipcheck__packages_names:
 ipcheck__repository_url: https://github.com/Turgon37/IpCheck.git
 
 # What version of IPCheck to retrieve
-ipcheck__repository_version: v2.2.2
+ipcheck__repository_version: v3.1.0
 
 # Path to install IpCheck
 ipcheck__install_path: /opt/IpCheck
@@ -31,6 +31,9 @@ ipcheck__runas_user: nobody
 
 # If true the cron job will be registered
 ipcheck__cron_enabled: True
+
+# Custom additionnals option to pass to ipcheck
+ipcheck__cron_options: --no-output --errors-to-stderr
 
 # Path to the IpCheck resources directory
 ipcheck__resources_path: '{{ ipcheck__install_path }}/ipcheckadvanced/resources'

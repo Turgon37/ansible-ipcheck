@@ -11,7 +11,7 @@
   cron:
     name:      ipcheck__routine
     cron_file: ipcheck__routine
-    job:       '{{ ipcheck__install_path }}/ipcheck.py --no-output --config={{ ipcheck__configuration_file_path }}'
+    job:       "{{ ipcheck__install_path }}/ipcheck.py --config={{ ipcheck__configuration_file_path }} {{ ipcheck__cron_options|d('') }}"
     user:      '{{ ipcheck__runas_user }}'
     minute:    '*/5'
   when: ipcheck__cron_enabled|bool
