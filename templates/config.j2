@@ -2,7 +2,7 @@
 ; {{ ansible_managed }}
 ;
 [core]
-url = {{ ipcheck__urls|join(',') }}
+{{ 'url_v4' if ipcheck__repository_version is version_compare(4, '>=') else 'url' }} = {{ ipcheck__urls|join(',') }}
 
 {% for name, settings in ipcheck__extensions|dictsort %}
 [extension.{{ name }}]
