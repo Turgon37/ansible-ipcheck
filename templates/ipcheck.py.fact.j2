@@ -6,16 +6,16 @@ import re
 import subprocess
 import sys
 
-iptables_exec = '{{ ipcheck__install_path }}/ipcheck.py'
+ipcheck_exec = '{{ ipcheck__install_path }}/ipcheck.py'
 
 content=dict()
 
 version_re = re.compile('version\s+v(?P<version>(?P<major>[0-9]+)[^ ]+)')
 try:
-    if not os.path.isfile(iptables_exec):
-        content['error'] = 'executable {} does not exists'.format(iptables_exec)
+    if not os.path.isfile(ipcheck_exec):
+        content['error'] = 'executable {} does not exists'.format(ipcheck_exec)
     else:
-        result = subprocess.check_output([iptables_exec, '--version'], universal_newlines=True)
+        result = subprocess.check_output([ipcheck_exec, '--version'], universal_newlines=True)
         match = version_re.search(result.strip())
         if match:
             content['version_full'] = match.group('version')

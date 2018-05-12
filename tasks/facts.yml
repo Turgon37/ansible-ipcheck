@@ -10,7 +10,7 @@
 
 - name: Insert custom fact file
   template:
-    src:   ipcheck.py.j2
+    src:   ipcheck.py.fact.j2
     dest:  "{{ facts__dir|d('/etc/ansible/facts.d') }}/ipcheck.fact"
     owner: root
     group: root
