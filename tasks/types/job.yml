@@ -31,7 +31,7 @@
 - name: 'Register cron task for ipcheck job {{ ipcheck__job.name }}'
   cron:
     name: ipcheck__routine
-    cron_file: ipcheck__routine
+    cron_file: 'ipcheck__job_{{ ipcheck__job.name }}'
     job: >-
       {{ ipcheck__install_path }}/ipcheck.py
       --config={{ ipcheck__configuration_directory }}/{{ ipcheck__job.name }}.conf
