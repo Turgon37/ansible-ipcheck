@@ -4,14 +4,14 @@
   assert:
     that:
       - ipcheck__job is defined
-      - ipcheck__job.name is defined
+      - ipcheck__job.name is defined and ipcheck__job.name|length
       - ipcheck__job.urls is defined
       - ipcheck__job.state|d('present') in ['present', 'absent']
     msg: >
       ipcheck__job must be defined with specifications
   tags: ['always']
 
-- name: 'Create job configuration file for {{ ipcheck__job.name }}'
+- name: 'Create job {{ ipcheck__job.name }} configuration file'
   template:
     src: job_config.j2
     dest: '{{ ipcheck__configuration_directory }}/{{ ipcheck__job.name }}.conf'
@@ -21,14 +21,14 @@
   when: ipcheck__job.state|d('present') == 'present'
   tags: ['ipcheck', 'ipcheck-configure', 'ipcheck-job']
 
-- name: 'Remove apt setting {{ apt__setting.name }}'
+- name: 'Remove job {{ ipcheck__job.name }} configuration file'
   file:
     path: '{{ ipcheck__configuration_directory }}/{{ ipcheck__job.name }}.conf'
     state: absent
   when: ipcheck__job.state|d('present') != 'present'
   tags: ['ipcheck', 'ipcheck-configure', 'ipcheck-job']
 
-- name: Register cron task for ipcheck routine
+- name: 'Register cron task for ipcheck job {{ ipcheck__job.name }}'
   cron:
     name: ipcheck__routine
     cron_file: ipcheck__routine
