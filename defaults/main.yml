@@ -67,4 +67,3 @@ ipcheck__urls:
 
 # Configuration dict for extensions
 ipcheck__extensions: {}
-
