@@ -15,7 +15,7 @@ ipcheck__packages_names:
 ipcheck__repository_url: https://github.com/Turgon37/IpCheck.git
 
 # What version of IPCheck to retrieve
-ipcheck__repository_version: v4.0.0
+ipcheck__repository_version: 4.0.0
 
 # Path to install IpCheck
 ipcheck__install_path: /opt/IpCheck
