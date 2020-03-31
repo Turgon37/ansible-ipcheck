@@ -33,11 +33,26 @@ ipcheck__git_update: false
 ### IPCHECK CONFIGURATION
 # ---------------------------------------
 
-# The path to the configuration file
-ipcheck__configuration_file_path: /etc/ipcheck.conf
+# Main directory which contains all ipcheck job configs
+ipcheck__configuration_directory: /etc/ipcheck
 
 # The user ipcheck will run as
 ipcheck__runas_user: nobody
+
+
+### IPCHECK JOBS
+# ---------------------------------------
+ipcheck__jobs:
+  default:
+    script_options: '{{ ipcheck__cron_options }}'
+    cron_enabled: '{{ ipcheck__cron_enabled }}'
+    urls: '{{ ipcheck__urls }}'
+    extensions: '{{ ipcheck__extensions }}'
+
+
+### DEPRECATED
+# The path to the configuration file
+ipcheck__configuration_file_path: /etc/ipcheck.conf
 
 # If true the cron job will be registered
 ipcheck__cron_enabled: true

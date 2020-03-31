@@ -1,0 +1,44 @@
+---
+
+- name: 'Check prerequisites for setting {{ apt__setting.name }}'
+  assert:
+    that:
+      - ipcheck__job is defined
+      - ipcheck__job.name is defined
+      - ipcheck__job.urls is defined
+      - ipcheck__job.state|d('present') in ['present', 'absent']
+    msg: >
+      ipcheck__job must be defined with specifications
+  tags: ['always']
+
+- name: 'Create job configuration file for {{ ipcheck__job.name }}'
+  template:
+    src: job_config.j2
+    dest: '{{ ipcheck__configuration_directory }}/{{ ipcheck__job.name }}.conf'
+    owner: '{{ ipcheck__runas_user }}'
+    group: root
+    mode: 0640
+  when: ipcheck__job.state|d('present') == 'present'
+  tags: ['ipcheck', 'ipcheck-configure', 'ipcheck-job']
+
+- name: 'Remove apt setting {{ apt__setting.name }}'
+  file:
+    path: '{{ ipcheck__configuration_directory }}/{{ ipcheck__job.name }}.conf'
+    state: absent
+  when: ipcheck__job.state|d('present') != 'present'
+  tags: ['ipcheck', 'ipcheck-configure', 'ipcheck-job']
+
+- name: Register cron task for ipcheck routine
+  cron:
+    name: ipcheck__routine
+    cron_file: ipcheck__routine
+    job: >-
+      {{ ipcheck__install_path }}/ipcheck.py
+      --config={{ ipcheck__configuration_directory }}/{{ ipcheck__job.name }}.conf
+      {{ ipcheck__job.script_options|d('') }}
+      --file-pattern={{ ipcheck__job.name }}.ip
+    user: '{{ ipcheck__runas_user }}'
+    minute: '*/5'
+    disabled: '{{ not ipcheck__job.cron_enabled|d(true) }}'
+    state: "{{ ipcheck__job.state|d('present') }}"
+  tags: ['ipcheck', 'ipcheck-configure', 'ipcheck-job']

@@ -24,6 +24,18 @@
   import_tasks: configure.yml
   tags: ['ipcheck', 'ipcheck-configure']
 
+- name: Ensure ipcheck jobs
+  include_tasks: types/job.yml
+  vars:
+    ipcheck__job: "{{
+        outer_item.value
+        |combine({'name': outer_item.key})
+      }}"
+  with_dict: '{{ ipcheck__jobs }}'
+  loop_control:
+    loop_var: outer_item
+  tags: ['ipcheck', 'ipcheck-configure']
+
 - name: Optionally including facts tasks
   include_tasks: facts.yml
   when: ipcheck__facts|bool
