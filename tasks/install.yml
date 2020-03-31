@@ -14,12 +14,28 @@
     update: '{{ ipcheck__git_update }}'
     force: true
 
-- name: Download externals ressources if needed
+- name: Download externals resources on local host
+  become: false
   get_url:
     url: '{{ item.url }}'
     checksum: '{{ item.checksum|d(omit) }}'
+    dest: '/tmp/ipcheck__res-{{ item.file }}'
+    mode: 0644
+  with_items: '{{ ipcheck__extensions_ressources|list }}'
+  when: item.state|d('present') == 'present'
+  register: _ipcheck__res_download
+  until: _ipcheck__res_download is succeeded
+  retries: 5
+  delay: 2
+  check_mode: false
+  delegate_to: localhost
+
+- name: Upload externals resources to server
+  copy:
+    src: '/tmp/ipcheck__res-{{ item.file }}'
     dest: '{{ ipcheck__resources_path }}/{{ item.file }}'
     owner: '{{ ipcheck__runas_user }}'
     group: root
     mode: 0750
   with_items: '{{ ipcheck__extensions_ressources|list }}'
+  when: item.state|d('present') == 'present'
