@@ -1,12 +1,12 @@
 ---
 # defaults file for ipcheck
 
-# Simple placeholder to allow other roles to detect this role
-ipcheck__role: True
-
 # Enable facts deploiement
-ipcheck__facts: True
+ipcheck__facts: true
 
+
+### INSTALL CONFIGURATION
+# ---------------------------------------
 # List of required packages
 ipcheck__packages_names:
   - git
@@ -21,7 +21,11 @@ ipcheck__repository_version: v4.0.0
 ipcheck__install_path: /opt/IpCheck
 
 # Allow automatic git pull on each ansible run
-ipcheck__git_update: False
+ipcheck__git_update: false
+
+
+### IPCHECK CONFIGURATION
+# ---------------------------------------
 
 # The path to the configuration file
 ipcheck__configuration_file_path: /etc/ipcheck.conf
@@ -30,7 +34,7 @@ ipcheck__configuration_file_path: /etc/ipcheck.conf
 ipcheck__runas_user: nobody
 
 # If true the cron job will be registered
-ipcheck__cron_enabled: True
+ipcheck__cron_enabled: true
 
 # Custom additionnals option to pass to ipcheck
 ipcheck__cron_options: --no-output --errors-to-stderr

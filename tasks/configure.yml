@@ -1,17 +1,18 @@
 ---
+
 - name: Create configuration file
   template:
-    src:   config.j2
-    dest:  '{{ ipcheck__configuration_file_path }}'
+    src: config.j2
+    dest: '{{ ipcheck__configuration_file_path }}'
     owner: '{{ ipcheck__runas_user }}'
     group: root
-    mode:  0640
+    mode: 0640
 
 - name: Register cron task for ipcheck routine
   cron:
-    name:      ipcheck__routine
+    name: ipcheck__routine
     cron_file: ipcheck__routine
-    job:       "{{ ipcheck__install_path }}/ipcheck.py --config={{ ipcheck__configuration_file_path }} {{ ipcheck__cron_options|d('') }}"
-    user:      '{{ ipcheck__runas_user }}'
-    minute:    '*/5'
+    job: "{{ ipcheck__install_path }}/ipcheck.py --config={{ ipcheck__configuration_file_path }} {{ ipcheck__cron_options|d('') }}"
+    user: '{{ ipcheck__runas_user }}'
+    minute: '*/5'
   when: ipcheck__cron_enabled|bool

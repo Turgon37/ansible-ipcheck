@@ -1,4 +1,6 @@
+---
 galaxy_info:
+  role_name: ipcheck
   author: Pierre GINDRAUD
   description: This role configure the IPCheck tool
   license: MIT
@@ -6,8 +8,9 @@ galaxy_info:
   platforms:
     - name: Debian
       versions:
-        - 9
-        - 8
+        - jessie
+        - stretch
+        - buster
   galaxy_tags: []
 
 dependencies: []

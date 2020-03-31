@@ -1,25 +1,25 @@
 ---
+
 - name: Install required packages
   package:
-    name:  '{{ item }}'
+    name: '{{ ipcheck__packages_names|list }}'
     state: present
-  with_items: '{{ ipcheck__packages_names }}'
 
 - name: Install IpCheck program
   git:
-    repo:    '{{ ipcheck__repository_url }}'
-    dest:    '{{ ipcheck__install_path }}'
-    clone:   True
+    repo: '{{ ipcheck__repository_url }}'
+    dest: '{{ ipcheck__install_path }}'
+    clone: true
     version: '{{ ipcheck__repository_version }}'
-    update:  '{{ ipcheck__git_update }}'
-    force:   True
+    update: '{{ ipcheck__git_update }}'
+    force: true
 
 - name: Download externals ressources if needed
   get_url:
-    url:      '{{ item.url }}'
+    url: '{{ item.url }}'
     checksum: '{{ item.checksum|d(omit) }}'
-    dest:     '{{ ipcheck__resources_path }}/{{ item.file }}'
-    owner:    '{{ ipcheck__runas_user }}'
-    group:    root
-    mode:     0750
-  with_items: '{{ ipcheck__extensions_ressources }}'
+    dest: '{{ ipcheck__resources_path }}/{{ item.file }}'
+    owner: '{{ ipcheck__runas_user }}'
+    group: root
+    mode: 0750
+  with_items: '{{ ipcheck__extensions_ressources|list }}'
