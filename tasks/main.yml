@@ -12,6 +12,10 @@
       skip: true
   tags: ['always']
 
+- name: Importing initialization tasks
+  import_tasks: init.yml
+  tags: ['always']
+
 - name: Importing install tasks
   import_tasks: install.yml
   tags: ['ipcheck', 'ipcheck-install']
