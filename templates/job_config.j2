@@ -1,0 +1,11 @@
+{{ ansible_managed|comment(decoration='; ') }}
+[core]
+{{ 'url_v4' if ipcheck__repository_version is version_compare(4, '>=') else 'url' }} = {{ ipcheck__job.urls|join(',') }}
+
+{% for name, settings in ipcheck__job.extensions|dictsort %}
+[extension.{{ name }}]
+{%   for key, value in settings|dictsort %}
+{{ key }} = {{ value }}
+{%   endfor %}
+
+{% endfor %}

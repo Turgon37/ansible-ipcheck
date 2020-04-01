@@ -1,13 +1,25 @@
-Ansible Role Hosts
+Ansible Role Ipcheck
 =========
 
-[![Build Status](https://travis-ci.org/Turgon37/ansible-ipcheck.svg?branch=master)](https://travis-ci.org/Turgon37/ansible-ipcheck)
+[![Build Status](https://travis-ci.com/Turgon37/ansible-ipcheck.svg?branch=master)](https://travis-ci.com/Turgon37/ansible-ipcheck)
+[![License](https://img.shields.io/badge/license-MIT%20License-brightgreen.svg)](https://opensource.org/licenses/MIT)
+[![Ansible Role](https://img.shields.io/badge/ansible%20role-Turgon37.ipcheck-blue.svg)](https://galaxy.ansible.com/Turgon37/ipcheck/)
 
-:warning: This role is under development, some important (and possibly breaking) changes may happend. Don't use it in production level environments but you can eventually base your own role on this one :hammer:
+
+## Description
 
 :grey_exclamation: Before using this role, please know that all my Ansible roles are fully written and accustomed to my IT infrastructure. So, even if they are as generic as possible they will not necessarily fill your needs, I advice you to carrefully analyse what they do and evaluate their capability to be installed securely on your servers.
 
-**This roles allow configuration of hosts file (commonly located at /etc/hosts).**
+This roles install the Ipcheck tool. It monitor your public ip address and can run trigger on ip changes (like DynDNS update, mailing....)
+
+## Requirements
+
+Require Ansible >= 2.4
+
+
+## OS Family
+
+This role is available for Debian
 
 ## Features
 
@@ -15,40 +27,48 @@ Currently this role provide the following features :
 
   * ipcheck tool installation (see https://github.com/Turgon37/IpCheck.git)
   * ipcheck configuration
-  * externals ressources fetching
+  * externals resources fetch (scripts or utilities)
   * [local facts](#facts)
-
-## Requirements
-
-### OS Family
-
-This role is available for
-
-  * Debian/Raspbian 8/9
-
-### Dependencies
-
 
 ## Role Variables
 
-The variables that can be passed to this role and a brief description about them are as follows:
+All variables which can be overridden are stored in [defaults/main.yml](defaults/main.yml) file as well as in table below. To see default values please refer to this file.
 
-| Name                           | Types/Values       | Description                                                |
-| -------------------------------|--------------------|----------------------------------------------------------- |
-| ipcheck__facts                 | Boolean            | Install the local fact script                              |
-| ipcheck__git_update            | Boolean            | Allow automatic git pull on each ansible run               |
-| ipcheck__cron_enabled          | Boolean            | Enable the script cron job                                 |
-| ipcheck__urls                  | List of urls       | List of url from which to retrieve the external ip address |
-| ipcheck__extensions            | Dict               | Configuration of all extensions (for ipcheck advanced mode)|
-| ipcheck__extensions_ressources | List of ressources | List of externals ressources to fetch                      |
+
+| Name                           | Types/Values      | Description                                                                       |
+| -------------------------------|-------------------|---------------------------------------------------------------------------------- |
+| ipcheck__facts                 | Boolean           | Install the local fact script                                                     |
+| ipcheck__repository_version    | String            | Ipcheck's version to install                                                      |
+| ipcheck__git_update            | Boolean           | Allow automatic git pull on each ansible run                                      |
+| ipcheck__runas_user            | String            | The user that run ipcheck                                                         |
+| ipcheck__jobs                  | Dict of jobs      | Configure ipcheck jobs                                                            |
+| ipcheck__extensions_ressources | List of ressources| List of externals resources to fetch and install in ipcheck's resources directory |
+
+### Jobs
+
+Each job configure ipcheck to track an ip address from one or several urls and run trigger on changes.
+
+You must use the ipcheck__jobs to configure jobs using a key per job and the available options as value :
+
+| Name           | Types/Values       | Description                                                  |
+| ---------------|--------------------|------------------------------------------------------------- |
+| urls           | List of urls       | Urls availables to ipcheck for retrieving current external ip|
+| script_options | String             | Raw cli options passed to ipcheck runtime                    |
+| cron_enabled   | Boolean            | Configure cron but choose to enable it or not                |
+| extensions     | Dict of extensions | Dict of configured extensions for this job                   |
+
+Please refer to ipcheck repository to see availables extensions and their usages and options.
 
 ## Facts
 
 By default the local fact are installed and expose the following variables :
 
 
-* ```ansible_local.ipcheck.version_full```
-* ```ansible_local.ipcheck.version_major```
+```
+ansible_local.ipcheck:
+    version_full: "1.0.0"
+    version_major: "1"
+```
 
 
 ## Example Playbook
@@ -60,31 +80,55 @@ To use this role create or update your playbook according the following example 
 
 
 ```
-    - hosts: servers
-      roles:
-         - ipcheck
+- hosts: all
+  roles:
+    - role: turgon37.ipcheck
       vars:
-        ipcheck__extensions_ressources_url:
-          - url: https://raw.githubusercontent.com/Turgon37/DynUpdate/master/dynupdate.py
+        ipcheck__extensions_ressources:
+          - url: https://raw.githubusercontent.com/Turgon37/DynDNSUpdate/master/dyndnsupdate.py
             file: dynupdate.py
+            checksum: sha256:8668b9923cef65928f430c0775e4af025059d7fe4f1eb1aa8df6830cf18e3adc
 
-        ipcheck__extensions:
-          digchecker:
-            server: nsserver.example.com
-            hostname: mypersonal_dynhost.example.com
-          mail:
-            sender: noreply@example.net
-            recipient: supervisor@example.net
-            body: 'Hi,\n\n{message}\n\nRegards,\nIpCheck supervisor for Nancy'
-            server: mysmtp
-            port: 25
-            info_mail: True
-          command:
-            exec: dynupdate.py
-            args: '-a {ip} --no-output -s {{ dynupdate_server }} -h {{ dynupdate_dynhost }} -u {{ dynupdate_user }} -p {{ dynupdate_password }}'
-            event: "{{ ['E_START', 'E_UPDATE']|join(',') }}"
+        ipcheck__jobs:
+          ovh:
+            urls: &_urls
+              - https://api.ipify.org/
+              - https://bot.whatismyipaddress.com/
+            extensions:
+              digchecker:
+                server: nsserver.example.com
+                hostname: mypersonal_dynhost.example.com
+              mail: &_mail
+                sender: noreply@example.net
+                recipient: supervisor@example.net
+                body: 'Hi,\n\n{message}\n\nRegards,\nIpCheck v{ipcheck_version}'
+                server: mysmtp
+                port: 25
+                info_mail: true
+              command:
+                exec: dynupdate.py
+                args: >-
+                  --dyn-address {ip}
+                  --dyn-hostname mypersonal_dynhost.example.com
+                  --username {{ vault__dynupdate_user }}
+                  --password {{ vault__dynupdate_password }}
+                  --dyn-server https://www.ovh.com
+                  --errors-to-stderr
+                event: E_START,E_UPDATE
+          spdyn:
+            urls: *_urls
+            extensions:
+              digchecker:
+                hostname: mypersonal_dynhost2.example.com
+              mail: *_mail
+              command:
+                exec: dynupdate.py
+                args: >-
+                  --dyn-address {ip}
+                  --dyn-hostname mypersonal_dynhost2.example.com
+                  --username {{ vault__dynupdate_user }}
+                  --password {{ vault__dynupdate_password }}
+                  --dyn-server https://update.spdyn.de
+                  --errors-to-stderr
+                event: E_START,E_UPDATE
 ```
-
-## License
-
-MIT

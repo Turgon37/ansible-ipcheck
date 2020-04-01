@@ -1,0 +1,11 @@
+---
+- name: Converge
+  hosts: all
+  any_errors_fatal: true
+  tasks:
+    - name: "Include turgon37.cron"
+      include_role:
+        name: turgon37.cron
+    - name: "Include turgon37.ipcheck"
+      include_role:
+        name: "ansible-ipcheck"

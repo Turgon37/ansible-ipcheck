@@ -1,0 +1,10 @@
+---
+
+- name: Assert required variables
+  assert:
+    that:
+      - item.url is defined
+      - item.file is defined
+    msg: >
+      Each externals resources must have url and file attributes
+  with_items: '{{ ipcheck__extensions_ressources|list }}'

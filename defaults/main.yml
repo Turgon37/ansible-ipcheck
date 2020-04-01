@@ -1,12 +1,12 @@
 ---
 # defaults file for ipcheck
 
-# Simple placeholder to allow other roles to detect this role
-ipcheck__role: True
-
 # Enable facts deploiement
-ipcheck__facts: True
+ipcheck__facts: true
 
+
+### INSTALL CONFIGURATION
+# ---------------------------------------
 # List of required packages
 ipcheck__packages_names:
   - git
@@ -15,28 +15,50 @@ ipcheck__packages_names:
 ipcheck__repository_url: https://github.com/Turgon37/IpCheck.git
 
 # What version of IPCheck to retrieve
-ipcheck__repository_version: v4.0.0
+ipcheck__repository_version: 4.0.0
 
 # Path to install IpCheck
 ipcheck__install_path: /opt/IpCheck
 
-# Allow automatic git pull on each ansible run
-ipcheck__git_update: False
+# Path to the IpCheck resources directory
+ipcheck__resources_path: '{{ ipcheck__install_path }}/ipcheckadvanced/resources'
 
-# The path to the configuration file
-ipcheck__configuration_file_path: /etc/ipcheck.conf
+# List of ressource to download in the resources directory
+ipcheck__extensions_ressources: []
+
+# Allow automatic git pull on each ansible run
+ipcheck__git_update: false
+
+
+### IPCHECK CONFIGURATION
+# ---------------------------------------
+
+# Main directory which contains all ipcheck job configs
+ipcheck__configuration_directory: /etc/ipcheck
 
 # The user ipcheck will run as
 ipcheck__runas_user: nobody
 
+
+### IPCHECK JOBS
+# ---------------------------------------
+ipcheck__jobs:
+  default:
+    script_options: '{{ ipcheck__cron_options }}'
+    cron_enabled: '{{ ipcheck__cron_enabled }}'
+    urls: '{{ ipcheck__urls }}'
+    extensions: '{{ ipcheck__extensions }}'
+
+
+### DEPRECATED
+# The path to the configuration file
+ipcheck__configuration_file_path: /etc/ipcheck.conf
+
 # If true the cron job will be registered
-ipcheck__cron_enabled: True
+ipcheck__cron_enabled: true
 
 # Custom additionnals option to pass to ipcheck
 ipcheck__cron_options: --no-output --errors-to-stderr
-
-# Path to the IpCheck resources directory
-ipcheck__resources_path: '{{ ipcheck__install_path }}/ipcheckadvanced/resources'
 
 # List of urls, the script will fetch IPv4 from
 ipcheck__urls:
@@ -45,6 +67,3 @@ ipcheck__urls:
 
 # Configuration dict for extensions
 ipcheck__extensions: {}
-
-# List of ressource to download in the ressource directory
-ipcheck__extensions_ressources: []
