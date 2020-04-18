@@ -6,7 +6,6 @@ services:
   - docker
 env:
   - ANSIBLE='ansible~=2.7.0'
-    MOLECULE='molecule<3.0'
   - ANSIBLE='ansible~=2.8.0'
   - ANSIBLE='ansible~=2.9.0'
 matrix:
@@ -17,7 +16,7 @@ install:
     pip install
     ${ANSIBLE}
     'ansible-lint>=3.4.15'
-    ${MOLECULE:-molecule>=2.13.0}
+    ${MOLECULE:-molecule>=2.15.0,<3.0.0}
     docker
     'testinfra>=1.7.0'
 
