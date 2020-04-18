@@ -6,7 +6,7 @@ services:
   - docker
 env:
   - ANSIBLE='ansible~=2.7.0'
-    MOLECULE='molecule~=2.19.0'
+    MOLECULE='molecule<3.0'
   - ANSIBLE='ansible~=2.8.0'
   - ANSIBLE='ansible~=2.9.0'
 matrix:
