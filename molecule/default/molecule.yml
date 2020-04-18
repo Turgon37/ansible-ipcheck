@@ -3,6 +3,8 @@ dependency:
   name: galaxy
 driver:
   name: docker
+lint:
+  name: yamllint
 platforms:
   - name: debian8
     image: turgon37/docker-debian8-ansible
@@ -10,13 +12,15 @@ platforms:
     image: turgon37/docker-debian9-ansible
   - name: debian10
     image: turgon37/docker-debian10-ansible
-lint: yamllint .
 provisioner:
   name: ansible
   options:
     diff: true
   lint:
     name: ansible-lint
+  playbooks:
+    create: create.yml
+    converge: playbook.yml
 scenario:
   name: default
 verifier:
