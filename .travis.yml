@@ -5,7 +5,7 @@ cache: pip
 services:
   - docker
 env:
-  - ANSIBLE='ansible>=2.4.0'
+  - ANSIBLE='ansible>=2.5.0'
 matrix:
   fast_finish: true
 
