@@ -19,6 +19,7 @@ provisioner:
   lint:
     name: ansible-lint
   playbooks:
+    create: create.yml
     converge: playbook.yml
 scenario:
   name: default
